@@ -7,6 +7,7 @@ use CachetHQ\Cachet\Models\IncidentTemplate;
 use Carbon\Carbon;
 use GrahamCampbell\Binput\Facades\Binput;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\MessageBag;
@@ -81,6 +82,7 @@ class DashScheduleController extends Controller
     public function addScheduleAction()
     {
         $scheduleData = Binput::get('incident');
+        $scheduleData['user_id'] = Auth::user()->id;
         // Parse the schedule date.
         $scheduledAt = Carbon::createFromFormat('d/m/Y H:i', $scheduleData['scheduled_at']);
 
@@ -155,6 +157,7 @@ class DashScheduleController extends Controller
     public function editScheduleAction(Incident $schedule)
     {
         $scheduleData = Binput::get('incident');
+        $scheduleData['user_id'] = Auth::user()->id;
         // Parse the schedule date.
         $scheduledAt = Carbon::createFromFormat('d/m/Y H:i', $scheduleData['scheduled_at']);
 
@@ -211,13 +214,11 @@ class DashScheduleController extends Controller
      */
     public function deleteScheduleAction(Incident $schedule)
     {
-        if ($schedule->delete()) {
-            return Redirect::back()->with('success', sprintf(
-                '<strong>%s</strong> %s',
-                trans('dashboard.notifications.awesome'),
-                trans('dashboard.schedule.delete.success')
-            ));
-        }
+        segment_track('Dashboard', [
+            'event' => 'Deleted Schedule',
+        ]);
+
+        $schedule->delete();
 
         return Redirect::back()->with('warning', sprintf(
             '<strong>%s</strong> %s',

@@ -8,7 +8,7 @@
         <div class="content-wrapper">
             <div class="header sub-header">
                 <span class="uppercase">
-                    <i class="icon ion-android-alert"></i> {{ trans('dashboard.schedule.schedule') }}
+                    <i class="icon ion-android-calendar"></i> {{ trans('dashboard.schedule.schedule') }}
                 </span>
                 <a class="btn btn-sm btn-success pull-right" href="{{ route('dashboard.schedule.add') }}">
                     {{ trans('dashboard.schedule.add.title') }}
@@ -31,8 +31,8 @@
                                 @endif
                             </div>
                             <div class="col-md-6 text-right">
-                                <a href="{{ route('dashboard.schedule.edit', [$incident->id]) }}" class="btn btn-default">{{ trans('forms.edit') }}</a>
-                                <a href="{{ route('dashboard.schedule.delete', [$incident->id]) }}" class="btn btn-danger confirm-action" data-method='DELETE'>{{ trans('forms.delete') }}</a>
+                                <a href="/dashboard/schedule/{{ $incident->id }}/edit" class="btn btn-default">{{ trans('forms.edit') }}</a>
+                                <a href="/dashboard/schedule/{{ $incident->id }}/delete" class="btn btn-danger confirm-action" data-method='DELETE'>{{ trans('forms.delete') }}</a>
                             </div>
                         </div>
                         @endforeach
